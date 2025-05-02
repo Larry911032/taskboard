@@ -1,103 +1,48 @@
+'use client'
+
 import Image from "next/image";
+import { useState } from "react";
+import TaskList from "./components/TaskList";
 
+// Home 頁面的主要元件
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.js
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  // 管理任務列表的狀態
+  const [tasks, setTasks] = useState([]);
+  // 管理新任務輸入框的狀態
+  const [newTask, setNewTask] = useState(''); 
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+  // 新增任務到列表的函式
+  const addTask = () => {
+    console.log("Before:", tasks); // 紀錄目前的任務列表
+    console.log("NewTask:", newTask); // 紀錄正在新增的任務
+    const updatedTasks = [...tasks, newTask]; // 建立包含新任務的新陣列
+    setTasks(updatedTasks); // 更新任務列表的狀態
+    console.log("After", updatedTasks); // 紀錄更新後的任務列表
+    setNewTask(''); // 重置輸入框
+  };
+
+  return (
+    <main className="p-10"> {/* 主容器，包含內邊距 */}
+      <h1 className="text-2xl font-bold">Task board</h1> {/* 頁面標題 */}
+
+      {/* 新增任務的輸入框與按鈕 */}
+      <div className="flex gap-10 mb-20">
+        <input 
+          className="border p-2 flex-1" // 輸入框樣式
+          placeholder="Enter a task" // 輸入框的提示文字
+          value={newTask} // 綁定輸入框的值到狀態
+          onChange={(e) => setNewTask(e.target.value)} // 當輸入框內容改變時更新狀態
+        />
+        <button
+          className="bg-blue-500 text-white px-10" // 按鈕樣式
+          onClick={addTask} // 點擊按鈕時觸發 addTask 函式
         >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+          ADD
+        </button>
+      </div>
+
+      {/* 顯示任務列表的元件 */}
+      <TaskList tasks={tasks}/>
+    </main>
   );
 }
